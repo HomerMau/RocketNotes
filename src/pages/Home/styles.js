@@ -49,11 +49,13 @@ export const Menu = styled.ul`
 `
 export const Search = styled.div`
   grid-area: search;
-  background: violet;
+  padding: 64px 64px 0px;
+
 `
 export const Content = styled.div`
   grid-area: content;
-  background: blue;
+  padding: 0 64px ;
+  overflow-y: auto;
 `
 export const NewNote = styled.button`
   grid-area: newnote;

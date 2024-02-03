@@ -1,9 +1,14 @@
-import { FiPlus } from 'react-icons/fi'
-import { Container, Brand, Menu, Search, Content, NewNote } from './styles';
-import { Header } from '../../components/Header';
-import { ButtonText } from '../../components/ButtonText';
+import { FiPlus } from "react-icons/fi"
+import { Container, Brand, Menu, Search, Content, NewNote } from "./styles"
 
-export function Home(){
+import { Header } from "../../components/Header"
+import { Input } from "../../components/Input"
+import { Section } from "../../components/Section"
+import { Note } from "../../components/Note"
+
+import { ButtonText } from "../../components/ButtonText"
+
+export function Home() {
   return (
     <Container>
       <Brand>
@@ -13,14 +18,33 @@ export function Home(){
       <Header />
 
       <Menu>
-        <li><ButtonText title="Todos" $isactive /></li>
-        <li><ButtonText title="React" /></li>
-        <li><ButtonText title="Nodejs" /></li>
+        <li>
+          <ButtonText title="Todos" $isactive />
+        </li>
+        <li>
+          <ButtonText title="React" />
+        </li>
+        <li>
+          <ButtonText title="Nodejs" />
+        </li>
       </Menu>
 
-      <Search></Search>
+      <Search>
+        <Input placeholder="Pesquisar pelo título" />
+      </Search>
 
-      <Content></Content>
+      <Content>
+        <Section title="Minhas notas">
+          <Note data={{
+              title: "React",
+              tags: [
+                { id: "1", name: "react" },
+                { id: "2", name: "rocketpocket" },
+              ]
+            }}
+          />
+        </Section>
+      </Content>
 
       <NewNote>
         <FiPlus />
