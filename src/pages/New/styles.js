@@ -12,7 +12,7 @@ export const Container = styled.div`
 `;
 
 export const Form = styled.form`
-  max-height: 550px;
+  max-width: 550px;
   margin: 38px auto;
 
   > header {
