@@ -1,10 +1,14 @@
-import { Header } from '../../components/Header';
-import { Input } from '../../components/Input';
+import { Header } from "../../components/Header"
+import { Input } from "../../components/Input"
+import { Textarea } from "../../components/Textarea"
+import { NoteItem } from "../../components/NoteItem"
+import { Section } from "../../components/Section"
+import { Button } from "../../components/Button"
 
-import { Container, Form } from './styles';
+import { Container, Form } from "./styles"
 
-export function New(){
-  return(
+export function New() {
+  return (
     <Container>
       <Header />
 
@@ -16,6 +20,22 @@ export function New(){
           </header>
 
           <Input placeholder="Título" />
+          <Textarea placeholder="Observações" />
+
+          <Section title="Links úteis">
+            <NoteItem value="https://rocketseat.com.br" />
+            <NoteItem placeholder="Novo link" value="" isNew />
+          </Section>
+
+          <Section title="Marcadores">
+          <div className="tags">
+            <NoteItem value="react" />
+            <NoteItem placeholder="Nova tag" value="" isNew />
+          </div>
+          </Section>
+
+    <Button title="Salvar" />
+
         </Form>
       </main>
     </Container>
