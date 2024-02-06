@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import { Header } from "../../components/Header"
 import { Input } from "../../components/Input"
 import { Textarea } from "../../components/Textarea"
@@ -16,7 +18,7 @@ export function New() {
         <Form>
           <header>
             <h1>Criar nota</h1>
-            <a href="/">Voltar</a>
+            <Link to="/">Voltar</Link>
           </header>
 
           <Input placeholder="Título" />
@@ -28,14 +30,13 @@ export function New() {
           </Section>
 
           <Section title="Marcadores">
-          <div className="tags">
-            <NoteItem value="react" />
-            <NoteItem placeholder="Nova tag" value="" isNew />
-          </div>
+            <div className="tags">
+              <NoteItem value="react" />
+              <NoteItem placeholder="Nova tag" value="" isNew />
+            </div>
           </Section>
 
-    <Button title="Salvar" />
-
+          <Button title="Salvar" />
         </Form>
       </main>
     </Container>
