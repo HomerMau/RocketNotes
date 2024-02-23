@@ -1,5 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react"
-
+import { createContext, useContext, useState, useEffect } from "react"
 import { api } from "../services/api"
 
 export const AuthContext = createContext({})
@@ -12,12 +11,10 @@ function AuthProvider({ children }) {
       const response = await api.post("/sessions", { email, password })
       const { user, token } = response.data
 
-      localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
-      localStorage.setItem("@rocketnotes:token", token)
+      localStorage.setItem("@RocketNotes:user", JSON.stringify(user))
+      localStorage.setItem("@RocketNotes:token", token)
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
       setData({ user, token })
     } catch (error) {
@@ -30,15 +27,32 @@ function AuthProvider({ children }) {
   }
 
   function signOut() {
-    localStorage.removeItem("@rocketnotes:token")
-    localStorage.removeItem("@rocketnotes:user")
+    localStorage.removeItem("@RocketNotes:token")
+    localStorage.removeItem("@RocketNotes:user")
 
     setData({})
   }
 
+  async function updateProfile({ user }) {
+    try {
+      await api.put("/users", user)
+      localStorage.setItem("@RocketNotes:user", JSON.stringify(user))
+
+      setData({ user, token: data.token })
+
+      alert("Perfil Atualizado!")
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message)
+      } else {
+        alert("Não foi possível atualizar o perfil.")
+      }
+    }
+  }
+
   useEffect(() => {
-    const token = localStorage.getItem("@rocketnotes:token")
-    const user = localStorage.getItem("@rocketnotes:user")
+    const token = localStorage.getItem("@RocketNotes:token")
+    const user = localStorage.getItem("@RocketNotes:user")
 
     if (token && user) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`
@@ -51,11 +65,14 @@ function AuthProvider({ children }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ 
-     signIn,
-     signOut,
-     user: data.user,
-      }}>
+    <AuthContext.Provider
+      value={{
+        signIn,
+        signOut,
+        updateProfile,
+        user: data.user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
