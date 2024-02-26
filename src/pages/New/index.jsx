@@ -47,6 +47,19 @@ export function New() {
   }
 
   async function handleNewNode() {
+
+    if (!title) {
+      return alert("Digite o titulo da nota");
+    } 
+
+    if(newLink) {
+      return alert("Você começou a escrever um novo campo porem não finalizou.")
+    }
+    
+    if(newTag) {
+      return alert("Você começou a escrever um novo campo porem não finalizou.")
+    }
+
     await api.post('/notes', {
       title,
       description,
