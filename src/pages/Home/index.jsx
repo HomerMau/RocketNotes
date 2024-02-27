@@ -12,8 +12,10 @@ import { ButtonText } from "../../components/ButtonText"
 import { api } from "../../services/api"
 
 export function Home() {
-  const [tags, setTags] = useState([])
-  const [tagsSelected, setTagsSelected] = useState([])
+  const [search, setSearch] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tagsSelected, setTagsSelected] = useState([]);
+  const [notes, setNotes] = useState([]);
 
   function handleTagsSelected(tagName) {
 
@@ -36,6 +38,16 @@ export function Home() {
     }
     fetchTags()
   }, [])
+
+  useEffect(() => {
+    async function fetchNotes(){
+      const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
+      setNotes(response.data);
+    }
+
+    fetchNotes();
+
+  }, [tagsSelected, search]);
 
   return (
     <Container>
@@ -66,20 +78,22 @@ export function Home() {
       </Menu>
 
       <Search>
-        <Input placeholder="Pesquisar pelo título" />
+        <Input 
+        placeholder="Pesquisar pelo título" 
+        onChange={(e) => setSearch(e.target.value)}
+        />
       </Search>
 
       <Content>
         <Section title="Minhas notas">
+        {
+          notes.map((note) => (
           <Note
-            data={{
-              title: "React",
-              tags: [
-                { id: "1", name: "react" },
-                { id: "2", name: "rocketpocket" },
-              ],
-            }}
+          key={String(note.id)}
+            data={note}
           />
+          ))
+          }
         </Section>
       </Content>
 
