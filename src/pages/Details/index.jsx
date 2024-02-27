@@ -1,44 +1,69 @@
-import { Container, Links, Content } from './styles'
-
-import { Header } from '../../components/Header'
-import { ButtonText } from '../../components/ButtonText' 
-import { Button } from '../../components/Button'
-import { Section } from '../../components/Section'
-import { Tag } from '../../components/Tag'
+/* eslint-disable react/jsx-key */
+import { useState, useEffect } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { Container, Links, Content } from "./styles"
+import { Header } from "../../components/Header"
+import { ButtonText } from "../../components/ButtonText"
+import { Button } from "../../components/Button"
+import { Section } from "../../components/Section"
+import { Tag } from "../../components/Tag"
+import { api } from "../../services/api"
 
 export function Details() {
+  const [data, setData] = useState(null)
+
+  const params = useParams()
+  const navigate = useNavigate()
+
+  function handleBack() {
+navigate("/");
+  }
+
+  useEffect(() => {
+    async function fetchNote() {
+      const response = await api.get(`/notes/${params.id}`)
+      setData(response.data)
+      setData(response.data)
+    }
+    fetchNote()
+  }, [])
+
   return (
     <Container>
       <Header />
+      {data && (
+        <main>
+          <Content>
+            <ButtonText title="Excluir nota" />
 
-      <main>
-        <Content>
-          <ButtonText title="Excluir nota" />
+            <h1>{data.title}</h1>
 
-          <h1>
-            Introdução ao React
-          </h1>
+            <p>{data.description}</p>
 
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio officia aliquid vitae ut architecto, perferendis dignissimos nobis fugit veniam accusamus iste. Quia, cumque soluta molestiae obcaecati ad veniam fugit eum. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas quia animi possimus quo atque impedit consectetur tenetur similique molestias aliquid labore necessitatibus, explicabo maxime vero at cumque voluptatum illo nihil! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias accusantium ad nemo saepe! Fuga reprehenderit perferendis commodi, quasi ducimus natus, neque accusamus nesciunt repudiandae cupiditate quod alias deleniti, velit beatae.
-          </p>
+            {data.links && (
+              <Section title="Links úteis">
+                <Links>
+                  {data.links.map((link) => (
+                    <li key={String(link.id)}>
+                      <a href={link.url} target="_blank" rel="noreferrer">{link.url}</a>
+                    </li>
+                  ))}
+                </Links>
+              </Section>
+            )}
 
-          <Section title="Links úteis">
-            <Links>
-              <li>
-                <a href="#">Link 1</a>
-              </li>
-            </Links>
-          </Section>
-
-          <Section title="Marcadores">
-            <Tag title="express" />
-            <Tag title="node" />
-          </Section>
-
-          <Button title="Voltar" />
-        </Content>
-      </main>
+            {data.tags && (
+              <Section title="Marcadores">
+                {data.tags.map((tag) => (
+                  <Tag key={String(tag.id)} title={tag.name} />
+                ))}
+              </Section>
+            )}
+            <Button title="Voltar" 
+            onClick={handleBack}/>
+          </Content>
+        </main>
+      )}
     </Container>
   )
 }
