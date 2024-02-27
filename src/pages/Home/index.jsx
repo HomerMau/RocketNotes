@@ -12,24 +12,25 @@ import { ButtonText } from "../../components/ButtonText"
 import { api } from "../../services/api"
 
 export function Home() {
-  const [search, setSearch] = useState("");
-  const [tags, setTags] = useState([]);
-  const [tagsSelected, setTagsSelected] = useState([]);
-  const [notes, setNotes] = useState([]);
+  const [search, setSearch] = useState("")
+  const [tags, setTags] = useState([])
+  const [tagsSelected, setTagsSelected] = useState([])
+  const [notes, setNotes] = useState([])
 
   function handleTagsSelected(tagName) {
-
-    const alreadySelected = tagsSelected.includes(tagName);
-
-    if (alreadySelected) {
-      const filteredTags = tagsSelected.filter(tag => tag !== tagName);
-      setTagsSelected(filteredTags);
-    } else {
-      setTagsSelected(prevState => [...prevState, tagName]);
+    if (tagName === "all") {
+      return setTagsSelected([])
     }
 
-  }
+    const alreadySelected = tagsSelected.includes(tagName)
 
+    if (alreadySelected) {
+      const filteredTags = tagsSelected.filter((tag) => tag !== tagName)
+      setTagsSelected(filteredTags)
+    } else {
+      setTagsSelected((prevState) => [...prevState, tagName])
+    }
+  }
 
   useEffect(() => {
     async function fetchTags() {
@@ -40,14 +41,15 @@ export function Home() {
   }, [])
 
   useEffect(() => {
-    async function fetchNotes(){
-      const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
-      setNotes(response.data);
+    async function fetchNotes() {
+      const response = await api.get(
+        `/notes?title=${search}&tags=${tagsSelected}`
+      )
+      setNotes(response.data)
     }
 
-    fetchNotes();
-
-  }, [tagsSelected, search]);
+    fetchNotes()
+  }, [tagsSelected, search])
 
   return (
     <Container>
@@ -78,22 +80,17 @@ export function Home() {
       </Menu>
 
       <Search>
-        <Input 
-        placeholder="Pesquisar pelo título" 
-        onChange={(e) => setSearch(e.target.value)}
+        <Input
+          placeholder="Pesquisar pelo título"
+          onChange={(e) => setSearch(e.target.value)}
         />
       </Search>
 
       <Content>
         <Section title="Minhas notas">
-        {
-          notes.map((note) => (
-          <Note
-          key={String(note.id)}
-            data={note}
-          />
-          ))
-          }
+          {notes.map((note) => (
+            <Note key={String(note.id)} data={note} />
+          ))}
         </Section>
       </Content>
 
